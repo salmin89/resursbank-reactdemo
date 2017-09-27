@@ -1,31 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+// Component
 import PeopleList from './components/PeopleList';
 import SelectedPerson from './components/SelectedPerson';
 
-const people = [
-  { name: "Salmin", age: 28, city: "Helsingborg", children: [] },
-  { name: "Test", age: 15, city: "Malmö", children: [] },
-  { name: "Bengt", age: 31, city: "Lund", children: [] },
-  {
-    name: "Åsa", age: 44, city: "Malmö", children: [
-      { name: "Albert", age: 12, city: "Helsingborg", children: [] },
-      { name: "Test", age: 15, city: "Malmö", children: [] },
-      { name: "Bengt", age: 31, city: "Lund", children: [] }
-    ]
-  }];
+// Actions
+import * as personDataActions from './actions/personData.actions';
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedPerson: null
-    }
-  }
-
-  handleSelectedPerson(person) {
-    this.setState({selectedPerson: person});
-    // console.log("Selected person:", person);
+  componentWillMount() {
+    this.props.actions.getAllPeople();
   }
 
   render() {
@@ -42,11 +29,11 @@ class App extends React.Component {
 
         <div className="row">
           <div className="col-md-6">
-            <PeopleList people={people} selectPerson={this.handleSelectedPerson.bind(this)} />
+            <PeopleList />
           </div>
 
           <div className="col-md-6">
-            <SelectedPerson selectedPerson={ this.state.selectedPerson } />
+            <SelectedPerson />
           </div>
         </div>
       </div>
@@ -54,4 +41,14 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProps(state, props) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(personDataActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
