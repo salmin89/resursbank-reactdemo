@@ -5,8 +5,7 @@ class Person extends React.Component {
 
     handleClick (e, person) {
         e.stopPropagation();
-        // console.log(person);
-        this.props.selectedPerson(person);
+        this.props.selectPerson(person);
     }
     
     render() {
@@ -28,7 +27,7 @@ class Person extends React.Component {
 
                     <div className="col-md-12">
                         {/* Show console.count() */}
-                        { person.children.length > 0 &&  <PeopleList people={person.children} />}
+                        { person.children.length > 0 &&  <PeopleList selectPerson={ this.props.selectPerson } people={person.children} />} {/* pass selectPerson again */}
                     </div>
                 </div>
             </li>

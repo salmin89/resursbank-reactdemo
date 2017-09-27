@@ -3,19 +3,6 @@ import Person from '../components/Person';
 
 class PeopleList extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedPerson: null
-        };    
-    }
-
-    handleSelectedPerson (person) {
-        debugger;
-        // this.setState({selectedPerson: person});
-        // console.log(this.state);
-    }
-
     render() {
 
         console.groupCollapsed("PeopleList");
@@ -27,7 +14,7 @@ class PeopleList extends React.Component {
         return (
             <ul className="list-group">
                 { people.map(person => {
-                    return (<Person key={person.name} person={person} selectedPerson={ this.handleSelectedPerson } />);
+                    return (<Person key={person.name} person={person} selectPerson={ this.props.selectPerson } />);
                 }) }
             </ul>
         );

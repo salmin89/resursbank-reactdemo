@@ -1,6 +1,6 @@
 import React from 'react';
 import PeopleList from './components/PeopleList';
-
+import SelectedPerson from './components/SelectedPerson';
 
 const people = [
   { name: "Salmin", age: 28, city: "Helsingborg", children: [] },
@@ -16,8 +16,16 @@ const people = [
 
 class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedPerson: null
+    }
+  }
+
   handleSelectedPerson(person) {
-    console.log("APP!");
+    this.setState({selectedPerson: person});
+    // console.log("Selected person:", person);
   }
 
   render() {
@@ -34,11 +42,11 @@ class App extends React.Component {
 
         <div className="row">
           <div className="col-md-6">
-            <PeopleList people={people} selectedPerson={this.handleSelectedPerson} />
+            <PeopleList people={people} selectPerson={this.handleSelectedPerson.bind(this)} />
           </div>
 
           <div className="col-md-6">
-            Selected person:
+            <SelectedPerson selectedPerson={ this.state.selectedPerson } />
           </div>
         </div>
       </div>
