@@ -19,7 +19,7 @@ class PeopleList extends React.Component {
             <ul className="list-group">
                 {/* {JSON.stringify(people)}; */}
 
-                { people.map((person, index) => {
+                { people && people.map((person, index) => {
                     return (
                         <Person 
                             person={person} //old way

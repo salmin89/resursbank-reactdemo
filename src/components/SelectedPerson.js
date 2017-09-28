@@ -1,9 +1,13 @@
 // Lib
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-// Component
+// Components
 import FormData from '../components/dumb/FormData';
+
+// Actions
+import * as personDataActions from '../actions/personData.actions';
 
 class SelectedPerson extends React.Component {
 
@@ -33,7 +37,7 @@ class SelectedPerson extends React.Component {
 
     savePerson(e) {
       e.preventDefault();
-      console.log(this.state);
+      this.props.actions.savePerson(this.props.personStore.people);
     }
 
     render() {
@@ -74,6 +78,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        actions: bindActionCreators(personDataActions, dispatch)
     }
 }
 

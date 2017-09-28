@@ -1,21 +1,17 @@
+import { getFromService, saveToService } from '../utils/FancyService';
+
 export function getAllPeople() {
 
-    const people = [
-        { name: "Salmin", age: 28, city: "Helsingborg", children: [] },
-        { name: "Test", age: 15, city: "Malmö", children: [] },
-        { name: "Bengt", age: 31, city: "Lund", children: [] },
-        { name: "Åsa", age: 44, city: "Malmö", children: [
-            { name: "Albert", age: 12, city: "Helsingborg", children: [] },
-            { name: "Test", age: 15, city: "Malmö", children: [] },
-            { name: "Bengt", age: 31, city: "Lund", children: [] }
-        ]}
-    ];
 
     return (dispatch) => {
-        dispatch({
-            type: 'GET_ALL_PEOPLE',
-            payload: people
-        });
+        //fake async
+        const people = getFromService("people")
+        setTimeout(() => {
+            dispatch({
+                type: 'GET_ALL_PEOPLE',
+                payload: people
+            });
+        }, (Math.random() * (1000 - 100) + 100));
     }
 }
 
@@ -24,6 +20,18 @@ export function selectPerson(person) {
         dispatch({
             type: 'SELECT_PERSON',
             payload: person
+        })
+    }
+}
+
+export function savePerson(people) {
+
+    saveToService('people', people);
+
+    return (dispatch) => {
+        dispatch({
+            type: 'SAVE_PERSON',
+            payload: people
         })
     }
 }

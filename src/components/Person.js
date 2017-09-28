@@ -14,7 +14,6 @@ class Person extends React.Component {
     handleClick(e, person) {
         e.stopPropagation();
         this.props.actions.selectPerson(person);
-
     }
 
     render() {
