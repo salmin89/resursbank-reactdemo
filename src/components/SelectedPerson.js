@@ -3,45 +3,37 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // Component
+import FormData from '../components/dumb/FormData';
 
 class SelectedPerson extends React.Component {
+
 
     constructor(props) {
         super(props);
         this.state = {
             selectedPerson: {
-                name: "",
-                age: "",
-                city: ""
+                name: '',
+                age: 0,
+                city: ''
             }
-        };
+        }
 
-        // this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillReceiveProps(prop) {
-        const { selectedPerson } = this.props.personStore;
-        if (selectedPerson) {
-            this.setState({selectedPerson: selectedPerson})
-        }
+    componentWillReceiveProps(newProps) {
+        this.setState({selectedPerson: newProps.personStore.selectedPerson});
+    }
+
+    handleChange(e, key) {
+        let newState = this.state.selectedPerson;
+        newState[key] = e.target.value;
+        this.setState(newState);
     }
 
     savePerson(e) {
-        e.preventDefault();
-
-        const updatedPerson = {
-            name: this.refs.name.value,
-            age: this.refs.age.value,
-            city: this.refs.city.value,
-            children: this.props.personStore.selectedPerson.children
-        }
-        console.log(updatedPerson);
-    }
-
-    handleChange(e) {
-        console.log(e.target.value);
-        // debugger; show
-        // this.setState({value: e.target.value});
+      e.preventDefault();
+      console.log(this.state);
     }
 
     render() {
@@ -49,32 +41,20 @@ class SelectedPerson extends React.Component {
         const { selectedPerson } = this.props.personStore;
         return (
             <div>
-                {JSON.stringify(selectedPerson)}
+                {/* {JSON.stringify(this.state.selectedPerson)} */}
                 {selectedPerson && <div className="row">
                     <form onSubmit={(e) => this.savePerson(e)}>
                         <div className="col-md-12"><h2>Selected person</h2></div>
 
-                        <div className="form-group">
-                            <label>Name:</label>
-                            <input type="text" ref="name" className="form-control" value={this.state.selectedPerson.name} onChange={ this.handleChange } />
-                        </div>
+                        {/* { Object.keys(selectedPerson).map((key) => {
+                          return (<FormData key={key} value={selectedPerson[key]} />)  // One way to do it
+                        })} */}
 
-                        <div className="form-group">
-                            <label>Age:</label>
-                            <input type="number" ref="age" className="form-control" defaultValue={selectedPerson.age} />
-                        </div>
-
-
-                        <div className="form-group">
-                            <label>City:</label>
-                            <input type="text" ref="city" className="form-control" defaultValue={selectedPerson.city} />
-                        </div>
-
-
-                        <div className="form-group">
-                            <button className="btn btn-default" style={{ cursor: 'pointer' }}>Save</button>
-                        </div>
+                        <FormData onChange={this.handleChange} type={'text'} label={'Name'} value={this.state.selectedPerson.name} />
+                        <FormData onChange={this.handleChange} type={'number'} label={ 'Age' } value={this.state.selectedPerson.age} />
+                        <FormData onChange={this.handleChange} type={'text'} label={ 'City' } value={this.state.selectedPerson.city} />
                         
+                        <button className="btn btn-default" type="submit" style={{cursor: 'pointer'}}>Save</button>
                     </form>
                 </div>}
             </div>
