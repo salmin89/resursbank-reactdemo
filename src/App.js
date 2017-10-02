@@ -2,24 +2,20 @@ import React from 'react';
 import PeopleList from './components/PeopleList';
 import SelectedPerson from './components/SelectedPerson';
 
-const people = [
-  { name: "Salmin", age: 28, city: "Helsingborg", children: [] },
-  { name: "Test", age: 15, city: "Malmö", children: [] },
-  { name: "Bengt", age: 31, city: "Lund", children: [] },
-  {
-    name: "Åsa", age: 44, city: "Malmö", children: [
-      { name: "Albert", age: 12, city: "Helsingborg", children: [] },
-      { name: "Test", age: 15, city: "Malmö", children: [] },
-      { name: "Bengt", age: 31, city: "Lund", children: [] }
-    ]
-  }];
+let items = [];
+
+for (var i = 0; i < 90000; i++) {
+  const rand = Math.floor(Math.random() * (9000 - 1) + 1);
+  const item = {sort: rand, index: i};
+  items.push(item);
+}
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      selectedPerson: null
+      items: items
     }
   }
 
@@ -28,27 +24,28 @@ class App extends React.Component {
     // console.log("Selected person:", person);
   }
 
+  sortAll() {
+    // console.log(this.state);
+    const sortedItems = this.state.items.sort((a, b) => {
+      return (parseInt(a.sort) >= parseInt(b.sort)) ? 1 : -1;
+    });
+    this.setState({items: sortedItems});
+  }
+
   render() {
 
     return (
       <div className="container">
 
-        <nav className="navbar navbar-light bg-light">
-          <a className="navbar-brand" href="">
-            <img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" className="d-inline-block align-top" alt="" />
-            Sample
-          </a>
-        </nav>
+        <button onClick={() => { this.sortAll()}}>sort all</button>
 
-        <div className="row">
-          <div className="col-md-6">
-            <PeopleList people={people} selectPerson={this.handleSelectedPerson.bind(this)} />
-          </div>
-
-          <div className="col-md-6">
-            <SelectedPerson selectedPerson={ this.state.selectedPerson } />
-          </div>
-        </div>
+        <ul className="list-group">
+          {this.state.items.map(item => {
+            return (
+              <li className="list-group-item" key={item.index} data-sort={item.sort}>#{item.index} Item {item.sort}</li>
+            )
+          })}
+        </ul>
       </div>
     );
   }
