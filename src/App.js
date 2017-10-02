@@ -44,7 +44,7 @@ class App extends React.Component {
           </a>
         </nav>
 
-        {true &&
+        {this.state.errors.length > 0 &&
           this.state.errors.map((error, index) => {
             return (
               <Error  errorMsg={error} 
