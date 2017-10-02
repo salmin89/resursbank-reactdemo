@@ -5,17 +5,34 @@ import { bindActionCreators } from 'redux';
 // Component
 import PeopleList from './components/PeopleList';
 import SelectedPerson from './components/SelectedPerson';
-
+import Error from './components/dumb/Error';
 // Actions
 import * as personDataActions from './actions/personData.actions';
+import * as errorActions from './actions/error.actions';
 
 class App extends React.Component {
 
+  constructor(props) {
+    super();
+    this.state = { errors: [] };
+    this.clearError = this.clearError.bind(this);
+  }
+
   componentWillMount() {
     this.props.actions.getAllPeople();
+    // this.setState(errorStore.errors)
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({errors: props.errorStore.errors});
+  }
+  
+  clearError(error) {
+    this.props.errorActions.clearError(error);    
   }
 
   render() {
+    console.log(this.state);
 
     return (
       <div className="container">
@@ -26,6 +43,16 @@ class App extends React.Component {
             Sample
           </a>
         </nav>
+
+        {true &&
+          this.state.errors.map((error, index) => {
+            return (
+              <Error  errorMsg={error} 
+                      clearError={this.clearError}
+                      key={index} />
+            )
+          })
+        }
 
         <div className="row">
           <div className="col-md-6">
@@ -42,12 +69,15 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state, props) {
-  return {};
+  return {
+    errorStore: state.errorStore
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(personDataActions, dispatch)
+    actions: bindActionCreators(personDataActions, dispatch),
+    errorActions: bindActionCreators(errorActions, dispatch)    
   }
 }
 

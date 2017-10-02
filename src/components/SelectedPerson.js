@@ -8,6 +8,7 @@ import FormData from '../components/dumb/FormData';
 
 // Actions
 import * as personDataActions from '../actions/personData.actions';
+import * as errorActions from '../actions/error.actions';
 
 class SelectedPerson extends React.Component {
 
@@ -26,7 +27,7 @@ class SelectedPerson extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({selectedPerson: newProps.personStore.selectedPerson});
+        this.setState({ selectedPerson: newProps.personStore.selectedPerson });
     }
 
     handleChange(e, key) {
@@ -36,8 +37,24 @@ class SelectedPerson extends React.Component {
     }
 
     savePerson(e) {
-      e.preventDefault();
-      this.props.actions.savePerson(this.props.personStore.people);
+        e.preventDefault();
+        if (this.state.selectedPerson.name && this.state.selectedPerson.age && this.state.selectedPerson.city) {
+            return this.props.actions.savePerson(this.props.personStore.people);
+        }
+
+        if (!this.state.selectedPerson.name) {
+            this.props.errorActions.setError("Name can't be empty");
+        }
+
+        if (!this.state.selectedPerson.age) {
+            this.props.errorActions.setError("Age can't be empty");
+        }
+
+        if (!this.state.selectedPerson.city) {
+            this.props.errorActions.setError("City can't be empty");
+        }
+
+        return;
     }
 
     render() {
@@ -55,10 +72,10 @@ class SelectedPerson extends React.Component {
                         })} */}
 
                         <FormData onChange={this.handleChange} type={'text'} label={'Name'} value={this.state.selectedPerson.name} />
-                        <FormData onChange={this.handleChange} type={'number'} label={ 'Age' } value={this.state.selectedPerson.age} />
-                        <FormData onChange={this.handleChange} type={'text'} label={ 'City' } value={this.state.selectedPerson.city} />
-                        
-                        <button className="btn btn-default" type="submit" style={{cursor: 'pointer'}}>Save</button>
+                        <FormData onChange={this.handleChange} type={'number'} label={'Age'} value={this.state.selectedPerson.age} />
+                        <FormData onChange={this.handleChange} type={'text'} label={'City'} value={this.state.selectedPerson.city} />
+
+                        <button className="btn btn-default" type="submit" style={{ cursor: 'pointer' }}>Save</button>
                     </form>
                 </div>}
             </div>
@@ -78,6 +95,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        errorActions: bindActionCreators(errorActions, dispatch),
         actions: bindActionCreators(personDataActions, dispatch)
     }
 }
